@@ -1,28 +1,41 @@
 package io.zipcoder.polymorphism;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 /**
  * Created by leon on 11/6/17.
  */
 public class MainApplication {
+    private static final Logger LOGGER = Logger.getLogger(MainApplication.class.getName());
     public static void main(String[] args){
-        int numberOfPets = getIntFromUser("Please enter number of pets: ");
-        System.out.println("Now please enter the pets name and its type with a space in-between.");
-        System.out.println("Available types are: Dog, Cat, Parrot, Ferret.");
+        int numberOfPets = getIntFromUser("> Please enter number of pets: ");
+        String[] petTypes = {"Dog","Cat","Parrot","Ferret"};
 
-        String[] petName = new String[numberOfPets];
-        String[] petType = new String[numberOfPets];
+        System.out.println("// Now please enter a pet name and its type with a space in-between.");
+        System.out.println("// Available types are: Dog, Cat, Parrot, Ferret.");
 
+        List<Pet> pets = new ArrayList<Pet>();
+        //String[] petName = new String[numberOfPets];
+        //String[] petType = new String[numberOfPets];
+        String[] sArray;
         for(int i=0; i<numberOfPets; i++){
-            String s = getStringFromUser("Enter a pet name and type: ");
-            String[] sArray = s.split(" ");
-            petName[i] = sArray[0];
-            petType[i] = sArray[1];
+            String s = getStringFromUser("> Enter a pet name and type: ");
+            sArray = s.split(" ");
+            if( sArray[1].equalsIgnoreCase(petTypes[0]) ){
+                pets.add(new Dog(sArray[0]));
+            }else if( sArray[1].equalsIgnoreCase(petTypes[1]) ){
+                pets.add(new Cat(sArray[0]));
+            }else if( sArray[1].equalsIgnoreCase(petTypes[2]) ){
+                pets.add(new Parrot(sArray[0]));
+            }else if( sArray[1].equalsIgnoreCase(petTypes[3]) ){
+                pets.add(new Ferret(sArray[0]));
+            }
         }
-        System.out.println("Your pet list:");
         for(int i=0; i<numberOfPets; i++){
-            System.out.println(petName[i] + " "+ petType[i]);
+            pets.get(i).speak();
         }
 
     }
@@ -41,8 +54,15 @@ public class MainApplication {
     public static String getStringFromUser(String prompt){
         Scanner scanner = new Scanner(System.in);
         System.out.print(prompt);
-        String userInput = scanner.nextLine();
-        return userInput;
+        while(true){
+            try {
+                return scanner.nextLine();
+            } catch (Exception e) {
+                System.out.printf("Input invalid, please enter again: ");
+            }
+        }
+        //String userInput = ;
+        //return userInput;
     }
 
 
